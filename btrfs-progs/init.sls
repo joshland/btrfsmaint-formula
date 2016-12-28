@@ -1,5 +1,5 @@
 removal:
-  pkg.uninstalled:
+  pkg.removed:
     - pkgs:
       - btrfs-progs
       
@@ -26,11 +26,22 @@ build:
   cmd.run:
     - name: |
         cd /usr/src/btrfs-progs
+        make clean
         ./autogen.sh
         ./configure
         make
-        make install
     - cwd: /usr/src/btrfs-progs
     - shell: /bin/bash
     - timeout: 300
     #- unless: test -x /usr/local/bin/foo
+
+install:
+  cmd.run:
+    - name: |
+        cd /usr/src/btrfs-progs
+        make install
+    - cwd: /usr/src/btrfs-progs
+    - shell: /bin/bash
+    - timeout: 300
+    - requires:
+        - build
